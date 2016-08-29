@@ -1,2 +1,2 @@
-# ethel
-A framework for building and deploying ethereum contracts in solidarity and golang 
+# Ethel
+A golang framework for building and deploying ethereum contracts written in solidarity
