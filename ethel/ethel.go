@@ -17,6 +17,12 @@ func main() {
       Usage:   "create a new contract",
       Action:  commands.NewProject,
     },
+    {
+      Name:    "test",
+      Aliases: []string{"t"},
+      Usage:   "test a contract",
+      Action:  commands.Test,
+    },
   }
 
   app.Run(os.Args)
