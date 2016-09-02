@@ -23,6 +23,12 @@ func main() {
       Usage:   "test a contract",
       Action:  commands.Test,
     },
+    {
+      Name:    "deploy",
+      Aliases: []string{"deploy"},
+      Usage:   "deploy [contract name] [params]",
+      Action:  commands.Deploy,
+    },
   }
 
   app.Run(os.Args)
