@@ -11,6 +11,7 @@ import (
 	"github.com/urfave/cli"
 	"golang.org/x/net/context"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -18,8 +19,7 @@ const key = `{"address":"c8a8b35742b10bdc00a724c6b76d5f85b6558b0c","crypto":{"ci
 const password = "hNJTZzGTxXmz9KzdDTvfqnCS"
 
 func Deploy(c *cli.Context) error {
-	fileName := "./contracts/" + c.Args().First() + ".sol"
-	contracts, err := compiler.CompileSolidity("", fileName)
+	contracts, err := compiler.CompileSolidity("", getFileName(c.Args().First()))
 	check(err)
 	conn, err := ethclient.Dial("http://localhost:8545/")
 	check(err)
@@ -30,13 +30,23 @@ func Deploy(c *cli.Context) error {
 		deployContract(contract, conn, transactor)
 	}
 
-	fmt.Println("Deployed", c.Args().First()+".sol")
+	fmt.Println("Deployed", getFileName(c.Args().First()))
 
 	printBalance(transactor, conn)
 
 	return nil
 }
 
+func getFileName(s string) string {
+	if _, err := os.Stat("contracts/" + s + ".sol"); err == nil {
+		return "contracts/" + s + ".sol"
+	} else if _, err := os.Stat(s); err == nil {
+		return s
+	} else {
+		log.Fatalf("%s does not exist", s)
+		return ""
+	}
+}
 func deployContract(contract *compiler.Contract, conn *ethclient.Client, transactor *bind.TransactOpts) {
 	j, err := json.Marshal(contract.Info.AbiDefinition)
 	check(err)
