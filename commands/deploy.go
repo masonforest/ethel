@@ -9,7 +9,6 @@ import (
 	"github.com/ethereum/go-ethereum/common/compiler"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli"
-	"golang.org/x/net/context"
 	"log"
 	"os"
 	"strings"
@@ -56,12 +55,6 @@ func deployContract(contract *compiler.Contract, conn *ethclient.Client, transac
 	check(err)
 	fmt.Printf("Contract pending deploy: 0x%x\n", address)
 	fmt.Printf("Transaction waiting to be mined: 0x%x\n", tx.Hash())
-}
-
-func printBalance(transactor *bind.TransactOpts, conn *ethclient.Client) {
-	bal, err := conn.BalanceAt(context.TODO(), transactor.From, nil)
-	check(err)
-	fmt.Printf("Remaining Balance: %s\n", common.CurrencyToString(bal))
 }
 
 func check(err error) {

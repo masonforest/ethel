@@ -61,7 +61,7 @@ func writeKeyFile(file string, content []byte) error {
 
 func askString(question string) string {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Print(question + " (y/n): ")
+	fmt.Print(question + ": ")
 	s, _ := reader.ReadString('\n')
 	return strings.Trim(s, "\n")
 }

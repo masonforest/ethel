@@ -18,6 +18,18 @@ func main() {
 			Action:  commands.Init,
 		},
 		{
+			Name:    "balance",
+			Aliases: []string{"b", "bal"},
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "testnet",
+					Usage: "use testnet",
+				},
+			},
+			Usage:  "print address and balance of your account",
+			Action: commands.Balance,
+		},
+		{
 			Name:    "new",
 			Aliases: []string{"n"},
 			Usage:   "create a new contract",
