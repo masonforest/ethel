@@ -1,0 +1,5 @@
+Token:
+  _name: Token
+  _totalSupply: 100
+  _symbol: TOK
+  _decimals: 8

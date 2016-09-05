@@ -1,6 +1,6 @@
 import "../libraries/ERC20Token.sol";
 
-contract Token is ERC20Token {
+contract Token2 is ERC20Token {
     string public name;
     uint8 public decimals;
     string public symbol;
@@ -8,7 +8,7 @@ contract Token is ERC20Token {
     mapping (address => uint256) balances;
     mapping (address => mapping (address => uint256)) allowed;
 
-    function Token(
+    function Token2(
         uint256 _totalSupply,
         string _name,
         uint8 _decimals,

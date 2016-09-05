@@ -3,51 +3,93 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Jeffail/gabs"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/compiler"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"log"
-	"os"
+	"math/big"
+	"path/filepath"
+	"strconv"
 	"strings"
 )
 
+const CONRACT_GLOB_PATH = "./contracts/*.sol"
+const LIBRARY_GLOB_PATH = "./libraries/*.sol"
+
 func Deploy(c *cli.Context) error {
-	contracts, err := compiler.CompileSolidity("", getFileName(c.Args().First()))
-	check(err)
+	contracts := compileContracts()
 	conn, err := ethclient.Dial(c.String("host"))
 	check(err)
 	transactor := getTransactor(c)
 
-	for _, contract := range contracts {
-		deployContract(contract, conn, transactor)
+	configData, _ := ioutil.ReadFile("./deploy.yml")
+	var config map[string]map[string]string
+	yaml.Unmarshal(configData, &config)
+	for contractName, paramsYAML := range config {
+		params := castContractParams(paramsYAML, contracts[contractName].Info.AbiDefinition)
+		deployContract(contracts[contractName], params, conn, transactor)
+		fmt.Printf("Deployed %s.\n", contractName)
 	}
-
-	fmt.Println("Deployed", getFileName(c.Args().First()))
 
 	printBalance(transactor, conn)
 
 	return nil
 }
 
-func getFileName(s string) string {
-	if _, err := os.Stat("contracts/" + s + ".sol"); err == nil {
-		return "contracts/" + s + ".sol"
-	} else if _, err := os.Stat(s); err == nil {
+func castContractParams(config map[string]string, abi interface{}) []interface{} {
+	var params []interface{}
+	d, _ := json.Marshal(abi)
+	jsonParsed, _ := gabs.ParseJSON(d)
+	children, _ := jsonParsed.Children()
+	for _, child := range children {
+
+		if child.Path("type").Data().(string) == "constructor" {
+			inputs, _ := child.Path("inputs").Children()
+			for _, input := range inputs {
+				value := castValue(config[input.Path("name").Data().(string)], input.Path("type").Data().(string))
+				params = append(params, value)
+			}
+		}
+	}
+
+	return params
+}
+
+func castValue(s string, t string) interface{} {
+	switch t {
+	case "uint8":
+		i, _ := strconv.Atoi(s)
+		return uint8(i)
+	case "uint256":
+		i, _ := strconv.Atoi(s)
+		return big.NewInt(int64(i))
+	case "string":
 		return s
-	} else {
-		log.Fatalf("%s does not exist", s)
-		return ""
+	default:
+		panic("unrecognized type")
 	}
 }
-func deployContract(contract *compiler.Contract, conn *ethclient.Client, transactor *bind.TransactOpts) {
+func compileContracts() map[string]*compiler.Contract {
+	contractFiles, _ := filepath.Glob(CONRACT_GLOB_PATH)
+	libFiles, _ := filepath.Glob(LIBRARY_GLOB_PATH)
+	solFiles := append(contractFiles, libFiles...)
+	contracts, err := compiler.CompileSolidity("", solFiles...)
+	check(err)
+	return contracts
+}
+
+func deployContract(contract *compiler.Contract, params []interface{}, conn *ethclient.Client, transactor *bind.TransactOpts) {
 	j, err := json.Marshal(contract.Info.AbiDefinition)
 	check(err)
 	abi, err := abi.JSON(strings.NewReader(string(j)))
 	check(err)
-	address, tx, _, err := bind.DeployContract(transactor, abi, common.FromHex(contract.Code), conn)
+	address, tx, _, err := bind.DeployContract(transactor, abi, common.FromHex(contract.Code), conn, params...)
 	check(err)
 	fmt.Printf("Contract pending deploy: 0x%x\n", address)
 	fmt.Printf("Transaction waiting to be mined: 0x%x\n", tx.Hash())
