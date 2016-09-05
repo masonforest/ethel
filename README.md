@@ -1,5 +1,5 @@
 # Ethel
-A golang framework for building and deploying ethereum contracts written in solidarity.
+A golang framework for building and deploying ethereum contracts written in solidity.
 
 _Ethel is still in the early prototype phase. If you're looking for something more stable check out one of these similar projects:_
 
