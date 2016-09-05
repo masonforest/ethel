@@ -13,9 +13,9 @@ import (
 )
 
 func Balance(c *cli.Context) error {
-	conn, err := ethclient.Dial("http://localhost:8545/")
-	t := getTransactor(c.Bool("testnet"))
+	conn, err := ethclient.Dial(c.String("host"))
 	check(err)
+	t := getTransactor(c)
 
 	fmt.Printf("Address: %s\n", t.From.Hex())
 	printBalance(t, conn)
@@ -23,7 +23,7 @@ func Balance(c *cli.Context) error {
 	return nil
 }
 
-func getTransactor(testnet bool) *bind.TransactOpts {
+func getTransactor(c *cli.Context) *bind.TransactOpts {
 	var config Config
 	var keyJSON string
 
@@ -31,7 +31,7 @@ func getTransactor(testnet bool) *bind.TransactOpts {
 	check(err)
 	err = json.Unmarshal(configJSON, &config)
 	check(err)
-	if testnet {
+	if c.Bool("testnet") {
 		keyJSON = config.Testnet
 	} else {
 		keyJSON = config.Live
@@ -66,8 +66,9 @@ func isKeyEncypted(s []byte) bool {
 	var key map[string]interface{}
 	err := json.Unmarshal(s, &key)
 	check(err)
-	return key["crypto"] != ""
+	return key["crypto"] != nil
 }
+
 func printBalance(transactor *bind.TransactOpts, conn *ethclient.Client) {
 	bal, err := conn.BalanceAt(context.TODO(), transactor.From, nil)
 	check(err)

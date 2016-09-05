@@ -3,8 +3,9 @@ contract Token {
   event Transfer(address indexed _from, address indexed _to, uint256 _value);
   mapping (address => uint) public balances;
 
-  function Token() {
-    balances[tx.origin] = 100;
+  function Token(string name, uint initalSupply) {
+    balances[tx.origin] = initalSupply;
+    name = name;
   }
 
   function transfer(address receiver, uint amount) returns(bool sufficient) {

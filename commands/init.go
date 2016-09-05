@@ -27,12 +27,12 @@ type Config struct {
 }
 
 func Init(c *cli.Context) error {
-	testnetKey := createKey("testnet")
-	liveKey := createKey("live")
+	testnetKey, testnetJSON := createKey("testnet")
+	liveKey, liveJSON := createKey("live")
 
 	config := &Config{
-		Testnet: string(testnetKey),
-		Live:    string(liveKey),
+		Testnet: string(testnetJSON),
+		Live:    string(liveJSON),
 	}
 
 	configJSON, err := json.Marshal(config)
@@ -40,6 +40,8 @@ func Init(c *cli.Context) error {
 	writeKeyFile(getConfigFile(), configJSON)
 
 	fmt.Println("Created .ethel")
+	fmt.Printf("Address: %s\n", liveKey.Address.Hex())
+	fmt.Printf("Testnet Address: %s\n", testnetKey.Address.Hex())
 	return nil
 }
 
@@ -80,7 +82,7 @@ func askBool(question string) bool {
 	}
 }
 
-func createKey(network string) []byte {
+func createKey(network string) (*accounts.Key, []byte) {
 	if askBool("Encrypt " + network + " key?") {
 		return createEncryptedKey(rand.Reader)
 	} else {
@@ -96,7 +98,7 @@ func getConfigFile() string {
 	return usr.HomeDir + "/.ethel.json"
 }
 
-func createEncryptedKey(rand io.Reader) []byte {
+func createEncryptedKey(rand io.Reader) (*accounts.Key, []byte) {
 	privateKeyECDSA, err := ecdsa.GenerateKey(secp256k1.S256(), rand)
 	check(err)
 	key := newKeyFromECDSA(privateKeyECDSA)
@@ -108,16 +110,16 @@ func createEncryptedKey(rand io.Reader) []byte {
 		accounts.StandardScryptP,
 	)
 	check(err)
-	return json
+	return key, json
 }
 
-func createPlainTextKey(rand io.Reader) []byte {
+func createPlainTextKey(rand io.Reader) (*accounts.Key, []byte) {
 	privateKeyECDSA, err := ecdsa.GenerateKey(secp256k1.S256(), rand)
 	check(err)
 	key := newKeyFromECDSA(privateKeyECDSA)
 	json, err := key.MarshalJSON()
 	check(err)
-	return json
+	return key, json
 }
 
 func newKeyFromECDSA(privateKeyECDSA *ecdsa.PrivateKey) *accounts.Key {

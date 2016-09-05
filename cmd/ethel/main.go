@@ -25,6 +25,11 @@ func main() {
 					Name:  "testnet",
 					Usage: "use testnet",
 				},
+				cli.StringFlag{
+					Name:  "host",
+					Value: "http://localhost:8545/",
+					Usage: "which host to connect to",
+				},
 			},
 			Usage:  "print address and balance of your account",
 			Action: commands.Balance,
@@ -45,7 +50,18 @@ func main() {
 			Name:    "deploy",
 			Aliases: []string{"deploy"},
 			Usage:   "deploy [contract name] [params]",
-			Action:  commands.Deploy,
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "testnet",
+					Usage: "use testnet",
+				},
+				cli.StringFlag{
+					Name:  "host",
+					Value: "http://localhost:8545/",
+					Usage: "which host to connect to",
+				},
+			},
+			Action: commands.Deploy,
 		},
 	}
 
