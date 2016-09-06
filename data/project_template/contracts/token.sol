@@ -1,8 +1,6 @@
-contract Token {
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+import "ERC20Token.sol";
 
-    uint256 public totalSupply;
+contract Token is ERC20Token{
     string public name;
     uint8 public decimals;
     string public symbol;
