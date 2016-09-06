@@ -24,7 +24,6 @@ Run your new contract's tests.
 
 # TODO
 
-* Add `ethel deploy` for deploying contracts
 * Add a server that can connect to a contract and act as an oracle
 * Add `ethel console` (will connect to a contract and boot [gore](https://github.com/motemen/gore) with a initialized session)
 * Make solidarity libraries actually work

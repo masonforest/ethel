@@ -1,6 +1,6 @@
 package main
 
-//go:generate abigen --sol token.sol --pkg main --out token.go
+//go:generate abigen --sol Token.sol --pkg main --out Token.go
 
 import (
 	"crypto/ecdsa"
