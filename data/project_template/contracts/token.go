@@ -14,18 +14,18 @@ import (
 )
 
 // TokenABI is the input ABI used to generate the binding from.
-const TokenABI = `[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balances","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"receiver","type":"address"},{"name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"name":"sufficient","type":"bool"}],"type":"function"},{"inputs":[{"name":"initialSupply","type":"uint256"},{"name":"tokenName","type":"string"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"}]`
+const TokenABI = `[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":true,"inputs":[],"name":"version","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"type":"function"},{"inputs":[{"name":"_totalSupply","type":"uint256"},{"name":"_name","type":"string"},{"name":"_decimals","type":"uint8"},{"name":"_symbol","type":"string"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_owner","type":"address"},{"indexed":true,"name":"_spender","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Approval","type":"event"}]`
 
 // TokenBin is the compiled bytecode used for deploying new contracts.
-const TokenBin = `0x6060604052604051610332380380610332833981016040528051608051909101600160a060020a0332166000908152600160208181526040832085905582548451848052601f60026000196101009685161596909602959095019092169390930481018290047f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56390810193929091908601908390106100d357805160ff19168380011785555b506100c19291505b8082111561010357600081556001016100ad565b5050505061022b806101076000396000f35b828001600101855582156100a5579182015b828111156100a55782518260005055916020019190600101906100e5565b509056606060405260e060020a600035046306fdde03811461003157806327e235e31461008f578063a9059cbb146100a7575b005b6040805160008054602060026001831615610100026000190190921691909104601f81018290048202840182019094528383526100e693908301828280156101a55780601f1061017a576101008083540402835291602001916101a5565b61015460043560016020526000908152604090205481565b61016660043560243573ffffffffffffffffffffffffffffffffffffffff3316600090815260016020526040812054829010156101ad57506000610225565b60405180806020018281038252838181518152602001915080519060200190808383829060006004602084601f0104600302600f01f150905090810190601f1680156101465780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60408051918252519081900360200190f35b604080519115158252519081900360200190f35b820191906000526020600020905b81548152906001019060200180831161018857829003601f168201915b505050505081565b73ffffffffffffffffffffffffffffffffffffffff338116600081815260016020908152604080832080548890039055938716808352918490208054870190558351868152935191937fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929081900390910190a35060015b9291505056`
+const TokenBin = `0x60606040526040516108a53803806108a583398101604052805160805160a05160c051929391820192909101600160a060020a03331660009081526005602090815260408220869055858255600180548651938290529092601f60026000196101008588161502019093169290920482018390047fb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf690810193919290918801908390106100cf57805160ff19168380011785555b506100ff9291505b8082111561018057600081556001016100bb565b828001600101855582156100b3579182015b828111156100b35782518260005055916020019190600101906100e1565b50506002805460ff191683178155815160038054600082905290927fc2575a0e9e593c00f959f8c92f12db2869c3395a3b0502d05e2516446f71f85b60206001841615610100026000190190931691909104601f9081018390048201939286019083901061018457805160ff19168380011785555b506101b49291506100bb565b5090565b82800160010185558215610174579182015b82811115610174578251826000505591602001919060010190610196565b5050505050506106dd806101c86000396000f36060604052361561008d5760e060020a600035046306fdde038114610095578063095ea7b3146100f257806318160ddd1461016757806323b872dd14610170578063313ce5671461025d57806354fd4d501461026957806370a08231146102c757806395d89b41146102f5578063a9059cbb14610353578063cae9ca51146103fa578063dd62ed3e146105c1575b6105f5610002565b60408051600180546020600282841615610100026000190190921691909104601f81018290048202840182019094528383526105f793908301828280156106ba5780601f1061068f576101008083540402835291602001916106ba565b61066560043560243533600160a060020a03908116600081815260066020908152604080832094871680845294825280832086905580518681529051929493927f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925929181900390910190a35060015b92915050565b6102e360005481565b610665600435602435604435600160a060020a0383166000908152600560205260408120548290108015906101c3575060066020908152604080832033600160a060020a03168452909152812054829010155b80156101cf5750600082115b156106c257600160a060020a03838116600081815260056020908152604080832080548801905588851680845281842080548990039055600683528184203390961684529482529182902080548790039055815186815291519293927fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef9281900390910190a35060016106c6565b61067960025460ff1681565b6040805160048054602060026001831615610100026000190190921691909104601f81018290048202840182019094528383526105f793908301828280156106ba5780601f1061068f576101008083540402835291602001916106ba565b600160a060020a03600435166000908152600560205260409020545b60408051918252519081900360200190f35b6105f76003805460408051602060026001851615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156106ba5780601f1061068f576101008083540402835291602001916106ba565b61066560043560243533600160a060020a03166000908152600560205260408120548290108015906103855750600082115b156106cd5733600160a060020a03908116600081815260056020908152604080832080548890039055938716808352918490208054870190558351868152935191937fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929081900390910190a3506001610161565b604080516020604435600481810135601f810184900484028501840190955284845261066594813594602480359593946064949293910191819084018382808284375094965050505050505033600160a060020a03908116600081815260066020908152604080832094881680845294825280832087905580518781529051929493927f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925929181900390910190a383600160a060020a031660405180807f72656365697665417070726f76616c28616464726573732c75696e743235362c81526020017f616464726573732c627974657329000000000000000000000000000000000000815260200150602e019050604051809103902060e060020a9004338530866040518560e060020a0281526004018085600160a060020a0316815260200184815260200183600160a060020a031681526020018280519060200190808383829060006004602084601f0104600302600f01f150905090810190601f1680156105995780820380516001836020036101000a031916815260200191505b509450505050506000604051808303816000876161da5a03f19250505015156106d557610002565b6102e3600435602435600160a060020a03828116600090815260066020908152604080832093851683529290522054610161565b005b60405180806020018281038252838181518152602001915080519060200190808383829060006004602084601f0104600302600f01f150905090810190601f1680156106575780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b604080519115158252519081900360200190f35b6040805160ff9092168252519081900360200190f35b820191906000526020600020905b81548152906001019060200180831161069d57829003601f168201915b505050505081565b5060005b9392505050565b506000610161565b5060016106c656`
 
 // DeployToken deploys a new Ethereum contract, binding an instance of Token to it.
-func DeployToken(auth *bind.TransactOpts, backend bind.ContractBackend, initialSupply *big.Int, tokenName string) (common.Address, *types.Transaction, *Token, error) {
+func DeployToken(auth *bind.TransactOpts, backend bind.ContractBackend, _totalSupply *big.Int, _name string, _decimals uint8, _symbol string) (common.Address, *types.Transaction, *Token, error) {
 	parsed, err := abi.JSON(strings.NewReader(TokenABI))
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
-	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(TokenBin), backend, initialSupply, tokenName)
+	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(TokenBin), backend, _totalSupply, _name, _decimals, _symbol)
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
@@ -159,30 +159,82 @@ func (_Token *TokenTransactorRaw) Transact(opts *bind.TransactOpts, method strin
 	return _Token.Contract.contract.Transact(opts, method, params...)
 }
 
-// Balances is a free data retrieval call binding the contract method 0x27e235e3.
+// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
-// Solidity: function balances( address) constant returns(uint256)
-func (_Token *TokenCaller) Balances(opts *bind.CallOpts, arg0 common.Address) (*big.Int, error) {
+// Solidity: function allowance(_owner address, _spender address) constant returns(remaining uint256)
+func (_Token *TokenCaller) Allowance(opts *bind.CallOpts, _owner common.Address, _spender common.Address) (*big.Int, error) {
 	var (
 		ret0 = new(*big.Int)
 	)
 	out := ret0
-	err := _Token.contract.Call(opts, out, "balances", arg0)
+	err := _Token.contract.Call(opts, out, "allowance", _owner, _spender)
 	return *ret0, err
 }
 
-// Balances is a free data retrieval call binding the contract method 0x27e235e3.
+// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
-// Solidity: function balances( address) constant returns(uint256)
-func (_Token *TokenSession) Balances(arg0 common.Address) (*big.Int, error) {
-	return _Token.Contract.Balances(&_Token.CallOpts, arg0)
+// Solidity: function allowance(_owner address, _spender address) constant returns(remaining uint256)
+func (_Token *TokenSession) Allowance(_owner common.Address, _spender common.Address) (*big.Int, error) {
+	return _Token.Contract.Allowance(&_Token.CallOpts, _owner, _spender)
 }
 
-// Balances is a free data retrieval call binding the contract method 0x27e235e3.
+// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
-// Solidity: function balances( address) constant returns(uint256)
-func (_Token *TokenCallerSession) Balances(arg0 common.Address) (*big.Int, error) {
-	return _Token.Contract.Balances(&_Token.CallOpts, arg0)
+// Solidity: function allowance(_owner address, _spender address) constant returns(remaining uint256)
+func (_Token *TokenCallerSession) Allowance(_owner common.Address, _spender common.Address) (*big.Int, error) {
+	return _Token.Contract.Allowance(&_Token.CallOpts, _owner, _spender)
+}
+
+// BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
+//
+// Solidity: function balanceOf(_owner address) constant returns(balance uint256)
+func (_Token *TokenCaller) BalanceOf(opts *bind.CallOpts, _owner common.Address) (*big.Int, error) {
+	var (
+		ret0 = new(*big.Int)
+	)
+	out := ret0
+	err := _Token.contract.Call(opts, out, "balanceOf", _owner)
+	return *ret0, err
+}
+
+// BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
+//
+// Solidity: function balanceOf(_owner address) constant returns(balance uint256)
+func (_Token *TokenSession) BalanceOf(_owner common.Address) (*big.Int, error) {
+	return _Token.Contract.BalanceOf(&_Token.CallOpts, _owner)
+}
+
+// BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
+//
+// Solidity: function balanceOf(_owner address) constant returns(balance uint256)
+func (_Token *TokenCallerSession) BalanceOf(_owner common.Address) (*big.Int, error) {
+	return _Token.Contract.BalanceOf(&_Token.CallOpts, _owner)
+}
+
+// Decimals is a free data retrieval call binding the contract method 0x313ce567.
+//
+// Solidity: function decimals() constant returns(uint8)
+func (_Token *TokenCaller) Decimals(opts *bind.CallOpts) (uint8, error) {
+	var (
+		ret0 = new(uint8)
+	)
+	out := ret0
+	err := _Token.contract.Call(opts, out, "decimals")
+	return *ret0, err
+}
+
+// Decimals is a free data retrieval call binding the contract method 0x313ce567.
+//
+// Solidity: function decimals() constant returns(uint8)
+func (_Token *TokenSession) Decimals() (uint8, error) {
+	return _Token.Contract.Decimals(&_Token.CallOpts)
+}
+
+// Decimals is a free data retrieval call binding the contract method 0x313ce567.
+//
+// Solidity: function decimals() constant returns(uint8)
+func (_Token *TokenCallerSession) Decimals() (uint8, error) {
+	return _Token.Contract.Decimals(&_Token.CallOpts)
 }
 
 // Name is a free data retrieval call binding the contract method 0x06fdde03.
@@ -211,23 +263,164 @@ func (_Token *TokenCallerSession) Name() (string, error) {
 	return _Token.Contract.Name(&_Token.CallOpts)
 }
 
-// Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
+// Symbol is a free data retrieval call binding the contract method 0x95d89b41.
 //
-// Solidity: function transfer(receiver address, amount uint256) returns(sufficient bool)
-func (_Token *TokenTransactor) Transfer(opts *bind.TransactOpts, receiver common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _Token.contract.Transact(opts, "transfer", receiver, amount)
+// Solidity: function symbol() constant returns(string)
+func (_Token *TokenCaller) Symbol(opts *bind.CallOpts) (string, error) {
+	var (
+		ret0 = new(string)
+	)
+	out := ret0
+	err := _Token.contract.Call(opts, out, "symbol")
+	return *ret0, err
+}
+
+// Symbol is a free data retrieval call binding the contract method 0x95d89b41.
+//
+// Solidity: function symbol() constant returns(string)
+func (_Token *TokenSession) Symbol() (string, error) {
+	return _Token.Contract.Symbol(&_Token.CallOpts)
+}
+
+// Symbol is a free data retrieval call binding the contract method 0x95d89b41.
+//
+// Solidity: function symbol() constant returns(string)
+func (_Token *TokenCallerSession) Symbol() (string, error) {
+	return _Token.Contract.Symbol(&_Token.CallOpts)
+}
+
+// TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
+//
+// Solidity: function totalSupply() constant returns(uint256)
+func (_Token *TokenCaller) TotalSupply(opts *bind.CallOpts) (*big.Int, error) {
+	var (
+		ret0 = new(*big.Int)
+	)
+	out := ret0
+	err := _Token.contract.Call(opts, out, "totalSupply")
+	return *ret0, err
+}
+
+// TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
+//
+// Solidity: function totalSupply() constant returns(uint256)
+func (_Token *TokenSession) TotalSupply() (*big.Int, error) {
+	return _Token.Contract.TotalSupply(&_Token.CallOpts)
+}
+
+// TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
+//
+// Solidity: function totalSupply() constant returns(uint256)
+func (_Token *TokenCallerSession) TotalSupply() (*big.Int, error) {
+	return _Token.Contract.TotalSupply(&_Token.CallOpts)
+}
+
+// Version is a free data retrieval call binding the contract method 0x54fd4d50.
+//
+// Solidity: function version() constant returns(string)
+func (_Token *TokenCaller) Version(opts *bind.CallOpts) (string, error) {
+	var (
+		ret0 = new(string)
+	)
+	out := ret0
+	err := _Token.contract.Call(opts, out, "version")
+	return *ret0, err
+}
+
+// Version is a free data retrieval call binding the contract method 0x54fd4d50.
+//
+// Solidity: function version() constant returns(string)
+func (_Token *TokenSession) Version() (string, error) {
+	return _Token.Contract.Version(&_Token.CallOpts)
+}
+
+// Version is a free data retrieval call binding the contract method 0x54fd4d50.
+//
+// Solidity: function version() constant returns(string)
+func (_Token *TokenCallerSession) Version() (string, error) {
+	return _Token.Contract.Version(&_Token.CallOpts)
+}
+
+// Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
+//
+// Solidity: function approve(_spender address, _value uint256) returns(success bool)
+func (_Token *TokenTransactor) Approve(opts *bind.TransactOpts, _spender common.Address, _value *big.Int) (*types.Transaction, error) {
+	return _Token.contract.Transact(opts, "approve", _spender, _value)
+}
+
+// Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
+//
+// Solidity: function approve(_spender address, _value uint256) returns(success bool)
+func (_Token *TokenSession) Approve(_spender common.Address, _value *big.Int) (*types.Transaction, error) {
+	return _Token.Contract.Approve(&_Token.TransactOpts, _spender, _value)
+}
+
+// Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
+//
+// Solidity: function approve(_spender address, _value uint256) returns(success bool)
+func (_Token *TokenTransactorSession) Approve(_spender common.Address, _value *big.Int) (*types.Transaction, error) {
+	return _Token.Contract.Approve(&_Token.TransactOpts, _spender, _value)
+}
+
+// ApproveAndCall is a paid mutator transaction binding the contract method 0xcae9ca51.
+//
+// Solidity: function approveAndCall(_spender address, _value uint256, _extraData bytes) returns(success bool)
+func (_Token *TokenTransactor) ApproveAndCall(opts *bind.TransactOpts, _spender common.Address, _value *big.Int, _extraData []byte) (*types.Transaction, error) {
+	return _Token.contract.Transact(opts, "approveAndCall", _spender, _value, _extraData)
+}
+
+// ApproveAndCall is a paid mutator transaction binding the contract method 0xcae9ca51.
+//
+// Solidity: function approveAndCall(_spender address, _value uint256, _extraData bytes) returns(success bool)
+func (_Token *TokenSession) ApproveAndCall(_spender common.Address, _value *big.Int, _extraData []byte) (*types.Transaction, error) {
+	return _Token.Contract.ApproveAndCall(&_Token.TransactOpts, _spender, _value, _extraData)
+}
+
+// ApproveAndCall is a paid mutator transaction binding the contract method 0xcae9ca51.
+//
+// Solidity: function approveAndCall(_spender address, _value uint256, _extraData bytes) returns(success bool)
+func (_Token *TokenTransactorSession) ApproveAndCall(_spender common.Address, _value *big.Int, _extraData []byte) (*types.Transaction, error) {
+	return _Token.Contract.ApproveAndCall(&_Token.TransactOpts, _spender, _value, _extraData)
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
-// Solidity: function transfer(receiver address, amount uint256) returns(sufficient bool)
-func (_Token *TokenSession) Transfer(receiver common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _Token.Contract.Transfer(&_Token.TransactOpts, receiver, amount)
+// Solidity: function transfer(_to address, _value uint256) returns(success bool)
+func (_Token *TokenTransactor) Transfer(opts *bind.TransactOpts, _to common.Address, _value *big.Int) (*types.Transaction, error) {
+	return _Token.contract.Transact(opts, "transfer", _to, _value)
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
-// Solidity: function transfer(receiver address, amount uint256) returns(sufficient bool)
-func (_Token *TokenTransactorSession) Transfer(receiver common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _Token.Contract.Transfer(&_Token.TransactOpts, receiver, amount)
+// Solidity: function transfer(_to address, _value uint256) returns(success bool)
+func (_Token *TokenSession) Transfer(_to common.Address, _value *big.Int) (*types.Transaction, error) {
+	return _Token.Contract.Transfer(&_Token.TransactOpts, _to, _value)
+}
+
+// Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
+//
+// Solidity: function transfer(_to address, _value uint256) returns(success bool)
+func (_Token *TokenTransactorSession) Transfer(_to common.Address, _value *big.Int) (*types.Transaction, error) {
+	return _Token.Contract.Transfer(&_Token.TransactOpts, _to, _value)
+}
+
+// TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
+//
+// Solidity: function transferFrom(_from address, _to address, _value uint256) returns(success bool)
+func (_Token *TokenTransactor) TransferFrom(opts *bind.TransactOpts, _from common.Address, _to common.Address, _value *big.Int) (*types.Transaction, error) {
+	return _Token.contract.Transact(opts, "transferFrom", _from, _to, _value)
+}
+
+// TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
+//
+// Solidity: function transferFrom(_from address, _to address, _value uint256) returns(success bool)
+func (_Token *TokenSession) TransferFrom(_from common.Address, _to common.Address, _value *big.Int) (*types.Transaction, error) {
+	return _Token.Contract.TransferFrom(&_Token.TransactOpts, _from, _to, _value)
+}
+
+// TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
+//
+// Solidity: function transferFrom(_from address, _to address, _value uint256) returns(success bool)
+func (_Token *TokenTransactorSession) TransferFrom(_from common.Address, _to common.Address, _value *big.Int) (*types.Transaction, error) {
+	return _Token.Contract.TransferFrom(&_Token.TransactOpts, _from, _to, _value)
 }

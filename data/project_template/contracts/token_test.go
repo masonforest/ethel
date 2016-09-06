@@ -20,14 +20,15 @@ import (
 )
 
 var (
-	key0      *ecdsa.PrivateKey
-	key1      *ecdsa.PrivateKey
-	addr0     common.Address
-	addr1     common.Address
-	auth      *bind.TransactOpts
-	backend       *backends.SimulatedBackend
-	GAS_LIMIT = big.NewInt(500000)
-	NONCE     = big.NewInt(2)
+	key0             *ecdsa.PrivateKey
+	key1             *ecdsa.PrivateKey
+	addr0            common.Address
+	addr1            common.Address
+	auth             *bind.TransactOpts
+	backend          *backends.SimulatedBackend
+	GAS_LIMIT        = big.NewInt(500000)
+	NONCE            = big.NewInt(2)
+	STARTING_BALANCE = big.NewInt(1000000000000000)
 )
 
 func TestMain(m *testing.M) {
@@ -39,11 +40,11 @@ func TestMain(m *testing.M) {
 	backend = backends.NewSimulatedBackend(
 		core.GenesisAccount{
 			Address: addr0,
-			Balance: big.NewInt(9223372036854775807),
+			Balance: STARTING_BALANCE,
 		},
 		core.GenesisAccount{
 			Address: addr1,
-			Balance: big.NewInt(9223372036854775807),
+			Balance: STARTING_BALANCE,
 		})
 	flag.Parse()
 	os.Exit(m.Run())
@@ -59,12 +60,19 @@ func Signer(key *ecdsa.PrivateKey) bind.SignerFn {
 	}
 }
 
-func deploy(initialSupply *big.Int, name string) *TokenSession {
+func deploy(
+	initialSupply *big.Int,
+	name string,
+	digits uint8,
+	symbol string,
+) *TokenSession {
 	_, _, token, err := DeployToken(
 		bind.NewKeyedTransactor(key0),
 		backend,
 		initialSupply,
 		name,
+		digits,
+		symbol,
 	)
 
 	if err != nil {
@@ -81,16 +89,16 @@ func deploy(initialSupply *big.Int, name string) *TokenSession {
 }
 
 func TestInitializer(t *testing.T) {
-	token := deploy(big.NewInt(100), "Token")
+	token := deploy(big.NewInt(100), "Token", uint8(2), "TOK")
 
 	name, _ := token.Name()
 	assert.Equal(t, "Token", name)
-	balance, _ := token.Balances(addr0)
+	balance, _ := token.BalanceOf(addr0)
 	assert.Equal(t, big.NewInt(100), balance)
 }
 
 func TestTransfer(t *testing.T) {
-	token := deploy(big.NewInt(3), "Token")
+	token := deploy(big.NewInt(3), "Token", uint8(2), "TOK")
 
 	_, err := token.Transfer(addr1, big.NewInt(1))
 
@@ -100,8 +108,8 @@ func TestTransfer(t *testing.T) {
 
 	backend.Commit()
 
-	senderBalance, _ := token.Balances(addr0)
-	recipientBalance, _ := token.Balances(addr1)
+	senderBalance, _ := token.BalanceOf(addr0)
+	recipientBalance, _ := token.BalanceOf(addr1)
 	assert.Equal(t, big.NewInt(2), senderBalance)
 	assert.Equal(t, big.NewInt(1), recipientBalance)
 }
