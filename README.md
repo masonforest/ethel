@@ -18,12 +18,20 @@ Create a new project.
     ethel new my_token
     cd my_token
 
-Run your new contract's tests.
+Run your new contract's tests:
 
     ethel test
+
+Initialize ethel (creates an Ethereum account to deploy from)
+
+    ethel init
+
+And deploy:
+
+    ethel deploy
 
 # TODO
 
 * Add a server that can connect to a contract and act as an oracle
-* Add `ethel console` (will connect to a contract and boot [gore](https://github.com/motemen/gore) with a initialized session)
+* Add `ethel console` (a REPL that will connect to a existing contract)
 * Lots of other things
