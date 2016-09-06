@@ -1,6 +1,6 @@
 package main
 
-//go:generate abigen --sol Token.sol --pkg main --out Token.go
+//go:generate sh -c "cd .. && abigen --sol contracts/Token.sol --pkg main --out contracts/Token.go"
 
 import (
 	"crypto/ecdsa"

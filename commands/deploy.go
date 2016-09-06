@@ -77,9 +77,7 @@ func castValue(s string, t string) interface{} {
 }
 func compileContracts() map[string]*compiler.Contract {
 	contractFiles, _ := filepath.Glob(CONRACT_GLOB_PATH)
-	libFiles, _ := filepath.Glob(LIBRARY_GLOB_PATH)
-	solFiles := append(contractFiles, libFiles...)
-	contracts, err := compiler.CompileSolidity("", solFiles...)
+	contracts, err := compiler.CompileSolidity("", contractFiles...)
 	check(err)
 	return contracts
 }
