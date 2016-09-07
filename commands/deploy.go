@@ -14,13 +14,13 @@ import (
 	"io/ioutil"
 	"log"
 	"math/big"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 )
 
-const CONRACT_GLOB_PATH = "./contracts/*.sol"
-const LIBRARY_GLOB_PATH = "./libraries/*.sol"
+const CONRACT_GLOB_PATH = "*.sol"
 
 func Deploy(c *cli.Context) error {
 	contracts := compileContracts()
@@ -76,8 +76,10 @@ func castValue(s string, t string) interface{} {
 	}
 }
 func compileContracts() map[string]*compiler.Contract {
+	os.Chdir("contracts")
 	contractFiles, _ := filepath.Glob(CONRACT_GLOB_PATH)
 	contracts, err := compiler.CompileSolidity("", contractFiles...)
+	os.Chdir("..")
 	check(err)
 	return contracts
 }

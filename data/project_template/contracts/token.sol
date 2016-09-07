@@ -1,4 +1,4 @@
-import "contracts/ERC20Token.sol";
+import "ERC20Token.sol";
 
 contract Token is ERC20Token{
     string public name;
